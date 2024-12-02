@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Upload</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form input, form textarea, form select, form button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        form button {
+            background: #28a745;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+        }
+
+        form button:hover {
+            background: #218838;
+        }
+
+        #message {
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Add a Pet</h1>
+        <form id="petForm">
+            <input type="text" id="name" placeholder="Pet Name" required>
+            <input type="text" id="age" placeholder="Pet Age" required>
+            <input type="text" id="area" placeholder="Area" required>
+            <textarea id="justification" placeholder="Justification" required></textarea>
+            <input type="email" id="email" placeholder="Owner Email" required>
+            <input type="tel" id="phone" placeholder="Owner Phone" required>
+            <select id="type" required>
+                <option value="">Select Type</option>
+                <option value="Dog">Dog</option>
+                <option value="Cat">Cat</option>
+                <option value="Rabbit">Rabbit</option>
+                <option value="Bird">Bird</option>
+                <option value="Fish">Fish</option>
+                <option value="Other">Other</option>
+            </select>
+            <input type="text" id="filename" placeholder="Image Filename" required>
+            <input type="text" id="status" placeholder="Status (e.g., Approved)" required>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="message"></div>
+    </div>
+    <script>
+        document.getElementById("petForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const pet = {
+                name: document.getElementById("name").value,
+                age: document.getElementById("age").value,
+                area: document.getElementById("area").value,
+                justification: document.getElementById("justification").value,
+                email: document.getElementById("email").value,
+                phone: document.getElementById("phone").value,
+                type: document.getElementById("type").value,
+                filename: document.getElementById("filename").value,
+                status: document.getElementById("status").value,
+            };
+
+            try {
+                const response = await fetch("http://localhost:5000/addPet", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(pet),
+                });
+
+                const result = await response.text();
+                document.getElementById("message").innerText = result;
+            } catch (error) {
+                document.getElementById("message").innerText = "Error: Could not add pet.";
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+</html>
